@@ -15,6 +15,19 @@ const ItemWidget = (props) => {
 	)
 }
 
+const StatisticsLine = (props) => {
+	let percent = 0
+	if (props.percent === 1) {
+		percent = 1
+	}
+
+	return (
+		<tr>
+			<td>{props.t}</td><td>{props.val} {percent && '%'}</td>
+		</tr>
+	)
+}
+
 const Stat = (props) => {
 	let good = props.data["good"]
 	let neutral = props.data["neutral"]
@@ -67,30 +80,13 @@ const Stat = (props) => {
 		<div>
 		<h1>statistics</h1>
 		<table>
-		<tr>
-			<td>Good</td>
-			<td>{good}</td>
-		</tr>
-		<tr>
-			<td>Neutral</td>
-			<td>{neutral}</td>
-		</tr>
-		<tr>
-			<td>Bad</td>
-			<td>{bad}</td>
-		</tr>
-		<tr>
-			<td>All</td>
-			<td>{total}</td>
-		</tr>
-		<tr>
-			<td>Average</td>
-			<td>{average}</td>
-		</tr>
-		<tr>
-			<td>Positive</td>
-			<td>{positive}</td>
-		</tr>
+		<StatisticsLine t="good" val={good} />
+		<StatisticsLine t="neutral" val={neutral} />
+		<StatisticsLine t="bad" val={bad} />
+		<StatisticsLine t="all" val={total} />
+		<StatisticsLine t="average" val={average} />
+		<StatisticsLine t="positive" val={positive} percent={1}/>
+
 		</table>
 		</div>
 	)
