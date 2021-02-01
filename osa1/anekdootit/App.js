@@ -30,6 +30,53 @@ const update_tbl = (which) => {
 	votes[which] += 1
 }
 
+const foo_high_id = (v) => {
+
+	var m = 0
+	var k = 1
+	var tk = 0
+	var first = 1;
+
+	for (let key in v) {
+		if (first) {
+			first = 0;
+			m = v[key]
+			tk = key
+		} else {
+			if (m < v[key]) {
+				m = v[key]
+				tk = key
+			}
+		}
+	}
+	console.log("m, tk", m, tk);
+	return([m, tk])
+	//Preturn (m)
+}
+
+const highest_id = () => {
+        var max1 = 0
+        var first = 1
+        var key = 0
+        var this_key = 0
+
+        for (key in votes) {
+                if (first) {
+                        first = 0
+                        max1 = votes[key]
+                        this_key = key
+                } else {
+                        if (max1 < votes[key]) {
+                                max1 = votes[key]
+                                this_key = key
+                        }
+                }
+
+        }
+        return ([max1, this_key])
+}
+
+
 const ItemWidget = (props) => {
 	return(
 		<div>
@@ -72,15 +119,56 @@ const ButtonVote = (props) => {
 	)
 }
 
-const App = (props) => { 
-	//let rv = Math.round(Math.random()*999999) % (anecdotes.length-1)
-	let rv = 0
-	const [selected, setSelected] = useState(rv)
+const TopVote = (props) => {
+	let votes_found = 0
+	for (var key in props.v) {
+		if (props.v[key] != 0) {
+			votes_found = 1
+			break
+		}
+	}
+	if (!votes_found) {
+		return (
+			<div>
+			<br/><br />
+			<h1>Anecdotes with most votes</h1>
+			<p>
+				No votes cast yet
+			</p>
+			</div>
+		)
+	}
 
-	//let ir = 0
-	//let init = use
-	//
+	let v = props.v
+	let a = props.a
+	console.log("v:" , v);
+	let [korkein, avain] = highest_id(v)
+
+	console.log("TopVote");
+	console.log("HAJAAA", korkein)
+	console.log("KUHAAA", avain)
+
+	console.log("a", a)
 	
+	return (
+		<div>
+		<br/> <br/>
+		<h1>Anecdotes with most votes</h1>
+		<p>
+			{a[avain]}<br/><br/>
+			{korkein}
+		</p>
+		</div>
+	)
+}
+
+const App = (props) => { 
+	let rv = Math.round(Math.random()*999999) % (anecdotes.length-1)
+	//let rv = 0
+	const [selected, setSelected] = useState(rv)
+	const [highest, setHigh] = useState(0)
+	const [hSelected, setHSelected] = useState(0)
+
 	const curr_ptr = () => {
 		return selected
 	}
@@ -90,30 +178,46 @@ const App = (props) => {
 		setSelected(r)
 	}
 
-	const next_clb = () => {
-		let randomv = Math.round((Math.random()*999999) % (anecdotes.length-1))
-		if (randomv == selected) {
-			console.log("randomv == selected");
-			// no change
-		} else {
-			console.log("randomv: ", randomv);
-			setSelected(randomv)
-		}
-	}
 	const cast_vote = (idx) => {
-		update_tbl(curr_ptr())
+		votes[idx] ++ 
+		setSelected(idx)
+
+		let [korkein, avain] = highest_id()
+		
+		setHSelected(avain)
+		setHigh(korkein)
 	}
 
+	const get_data = (s) => {
+		return (anecdotes[s])
+	}
+	const get_votes = (s) => {
+		return (votes[s])
+	}
+/*
+ *
+ *	{anecdotes[selected]}<br/>
+ *	has {votes[selected]} votes
+ */
+
+	console.log("curr_ptr(): ", curr_ptr())
+	let foo = votes[curr_ptr()]
+	console.log("foo:------------------------------------", foo)
+	console.log("votes: ---------------------------------", votes)
+	console.log("HUOH: ----------------------------------", votes[selected])
 	return (
 		<div>
 			<p>
-				{anecdotes[selected]}<br/>
-				has {votes[curr_ptr()]} votes
+				{get_data(selected)}<br/>
+				has {get_votes(selected)} votes
 				<Button
-					name="next anecodte"
+					name="next anecdote"
 					clb={push_button}
 					vote_clb={cast_vote}
 					curr_ptr={curr_ptr} />
+			</p>
+			<p>
+				<TopVote v={votes} a={anecdotes} />
 			</p>
 		</div>
 	)
