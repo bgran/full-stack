@@ -13,10 +13,20 @@ const Header = (props) => {
 	)
 }
 
+const Item = (props) => {
+	return (
+		<div>
+			{props.name}: {props.harkkoja}
+		</div>
+	)
+}
+
 const Content = (props) => {
 	return (
 		<div>
-			<p>{props.name} {props.val}</p>
+			{props.course_data["parts"].map((item, index) => (
+				<p><Item name={item["name"]} harkkoja={item["harkkoja"]} key={index} /></p>
+			))}
 		</div>
 	)
 }
@@ -31,30 +41,27 @@ const Total = (props) => {
 
 
 const App = () => { 
-	const course = "Half stack app development"
+	const course_data = {
+		"name": "Half stack app development",
+		"parts": [
+			{"name": "Fundamentals of React", "harkkoja": 10},
+			{"name": "Using props to pass data", "harkkoja": 7},
+			{"name": "State of a component", "harkkoja": 14},
+		]	
+	}
 
-	const part1 = "Fundamentals of React"
-	const exercises1 = 10
-
-	const part2 = "Using props to pass data"
-	const exercises2 = 7
-
-	const part3 = "State of a component"
-	const exercises3 = 14
-
-	const n = exercises1 + exercises2 + exercises3
+	let n = 0
+	for(var i=0; i<course_data["parts"].length; i++) {
+		n = n + course_data["parts"][i]["harkkoja"];
+	}
 
 	return (
 		<div>
-			<h1><Header name={course} /></h1>
-			<Content name={part1} val={exercises1} />
-			<Content name={part2} val={exercises2} />
-			<Content name={part3} val={exercises3} />
+			<h1><Header name={course_data["name"]} /></h1>
+			<Content course_data={course_data} />
 			<Total foo={n} />
 		</div>
 	)
-
-			
 }
 
 export default App;
