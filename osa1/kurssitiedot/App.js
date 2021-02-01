@@ -32,9 +32,14 @@ const Content = (props) => {
 }
 
 const Total = (props) => {
+	const course_data = props.course_data
+	let n = 0
+	for (var i=0; i<course_data["parts"].length; i++) {
+		n = n + course_data["parts"][i]["harkkoja"];
+	}
 	return (
 		<div>
-			<p>Number of exercises: {props.foo}</p>
+			<p>Number of exercises: {n}</p>
 		</div>
 	)
 }
@@ -50,16 +55,16 @@ const App = () => {
 		]	
 	}
 
-	let n = 0
-	for(var i=0; i<course_data["parts"].length; i++) {
-		n = n + course_data["parts"][i]["harkkoja"];
-	}
+	//let n = 0
+	//for(var i=0; i<course_data["parts"].length; i++) {
+	//	n = n + course_data["parts"][i]["harkkoja"];
+	//}
 
 	return (
 		<div>
 			<h1><Header name={course_data["name"]} /></h1>
 			<Content course_data={course_data} />
-			<Total foo={n} />
+			<Total course_data={course_data} />
 		</div>
 	)
 }
