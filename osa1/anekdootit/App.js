@@ -14,7 +14,21 @@ const anecdotes = [
 	'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
+//const votes = [
+//	0, 0, 0, 0, 0, 0]
+const votes = {
+	0: 0,
+	1: 0,
+	2: 0,
+	3: 0,
+	4: 0,
+	5: 0
+}
 
+
+const update_tbl = (which) => {
+	votes[which] += 1
+}
 
 const ItemWidget = (props) => {
 	return(
@@ -24,79 +38,10 @@ const ItemWidget = (props) => {
 	)
 }
 
-const StatisticsLine = (props) => {
-	let percent = 0
-	if (props.percent === 1) {
-		percent = 1
-	}
-
-	return (
-		<tr>
-			<td>{props.t}</td><td>{props.val} {percent && '%'}</td>
-		</tr>
-	)
-}
-
-const Stat = (props) => {
-	let good = props.data["good"]
-	let neutral = props.data["neutral"]
-	let bad = props.data["bad"]
-
-	// TOTAL
-	let total = good + neutral + bad
-
-	// COUNTER
-	let counter = 0
-	for(let i=0; i< good ; i++) {
-		counter += 1
-	}
-	for (let i= 0; i<neutral  ; i++) {
-		// :D
-		counter += 0
-	}
-	for (let i=0; i< bad; i++) {
-		counter -= 1
-	}
-
-
-	// ALL
-	let all = good + neutral + bad
-
-	// AVERAGE
-	let average = 0
-	if (total === 0) {
-		average = 0
-	} else {
-		average = counter / total
-	}
-
-	// POSITIVE
-	let positive = 0
-	if (total === 0) {
-		positive = 0
-	} else {
-		positive = (good / total) * 100
-	}
-
-	if (good === 0 && neutral===0 && bad === 0) {
-		return (
-			<div> No feedback give</div>
-		)
-	}
-
-	// <h1>statistics</h1>
+const Widget = (k, v) => {
 	return (
 		<div>
-		<h1>statistics</h1>
-		<table>
-		<StatisticsLine t="good" val={good} />
-		<StatisticsLine t="neutral" val={neutral} />
-		<StatisticsLine t="bad" val={bad} />
-		<StatisticsLine t="all" val={total} />
-		<StatisticsLine t="average" val={average} />
-		<StatisticsLine t="positive" val={positive} percent={1}/>
-
-		</table>
+			{k}: {v}
 		</div>
 	)
 }
@@ -107,28 +52,73 @@ const Button = (props) => {
 			<button onClick={() => props.clb()}>
 				 {props.name}
 			</button>
+			<button onClick={() => props.vote_clb(props.curr_ptr())}>
+				vote
+			</button>
+		</div>
+	)
+}
+
+const ButtonVote = (props) => {
+	return (
+		<div>
+		<button onClick={() => props.clb()}>
+			 {props.name}
+		</button>
+		<button onClick={() => props.vote_clb(props.curr_ptr())}>
+			vote
+		</button>
 		</div>
 	)
 }
 
 const App = (props) => { 
-	const [selected, setSelected] = useState(0)
+	//let rv = Math.round(Math.random()*999999) % (anecdotes.length-1)
+	let rv = 0
+	const [selected, setSelected] = useState(rv)
+
+	//let ir = 0
+	//let init = use
+	//
+	
+	const curr_ptr = () => {
+		return selected
+	}
+
+	const push_button = () => {
+		let r = Math.round((Math.random()*99999) % (anecdotes.length - 1))
+		setSelected(r)
+	}
 
 	const next_clb = () => {
 		let randomv = Math.round((Math.random()*999999) % (anecdotes.length-1))
 		if (randomv == selected) {
+			console.log("randomv == selected");
 			// no change
 		} else {
+			console.log("randomv: ", randomv);
 			setSelected(randomv)
 		}
+	}
+	const cast_vote = (idx) => {
+		update_tbl(curr_ptr())
 	}
 
 	return (
 		<div>
-			<p>{anecdotes[selected]}</p>
-			<p><Button name="next anecdote" clb={next_clb} /></p>
+			<p>
+				{anecdotes[selected]}<br/>
+				has {votes[curr_ptr()]} votes
+				<Button
+					name="next anecodte"
+					clb={push_button}
+					vote_clb={cast_vote}
+					curr_ptr={curr_ptr} />
+			</p>
 		</div>
 	)
 }
 
 export default App;
+ReactDOM.render(<App anecdotes={anecdotes} />, document.getElementById('root'));
+
