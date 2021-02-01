@@ -49,9 +49,7 @@ const foo_high_id = (v) => {
 			}
 		}
 	}
-	console.log("m, tk", m, tk);
 	return([m, tk])
-	//Preturn (m)
 }
 
 const highest_id = () => {
@@ -141,15 +139,8 @@ const TopVote = (props) => {
 
 	let v = props.v
 	let a = props.a
-	console.log("v:" , v);
 	let [korkein, avain] = highest_id(v)
 
-	console.log("TopVote");
-	console.log("HAJAAA", korkein)
-	console.log("KUHAAA", avain)
-
-	console.log("a", a)
-	
 	return (
 		<div>
 		<br/> <br/>
@@ -200,11 +191,7 @@ const App = (props) => {
  *	has {votes[selected]} votes
  */
 
-	console.log("curr_ptr(): ", curr_ptr())
 	let foo = votes[curr_ptr()]
-	console.log("foo:------------------------------------", foo)
-	console.log("votes: ---------------------------------", votes)
-	console.log("HUOH: ----------------------------------", votes[selected])
 	return (
 		<div>
 			<p>
