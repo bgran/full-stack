@@ -20,11 +20,78 @@ const Stat = (props) => {
 	let neutral = props.data["neutral"]
 	let bad = props.data["bad"]
 
-	return(
+	// TOTAL
+	let total = good + neutral + bad
+
+	// COUNTER
+	let counter = 0
+	for(let i=0; i< good ; i++) {
+		counter += 1
+	}
+	for (let i= 0; i<neutral  ; i++) {
+		// :D
+		counter += 0
+	}
+	for (let i=0; i< bad; i++) {
+		counter -= 1
+	}
+
+
+	// ALL
+	let all = good + neutral + bad
+
+	// AVERAGE
+	let average = 0
+	if (total === 0) {
+		average = 0
+	} else {
+		average = counter / total
+	}
+
+	// POSITIVE
+	let positive = 0
+	if (total === 0) {
+		positive = 0
+	} else {
+		positive = (good / total) * 100
+	}
+
+	if (good === 0 && neutral===0 && bad === 0) {
+		return (
+			<div> No feedback give</div>
+		)
+	}
+
+	// <h1>statistics</h1>
+	return (
 		<div>
-			<ItemWidget name="good" val={good} />
-			<ItemWidget name="netural" val={neutral} />
-			<ItemWidget name="bad" val={bad} />
+		<h1>statistics</h1>
+		<table>
+		<tr>
+			<td>Good</td>
+			<td>{good}</td>
+		</tr>
+		<tr>
+			<td>Neutral</td>
+			<td>{neutral}</td>
+		</tr>
+		<tr>
+			<td>Bad</td>
+			<td>{bad}</td>
+		</tr>
+		<tr>
+			<td>All</td>
+			<td>{total}</td>
+		</tr>
+		<tr>
+			<td>Average</td>
+			<td>{average}</td>
+		</tr>
+		<tr>
+			<td>Positive</td>
+			<td>{positive}</td>
+		</tr>
+		</table>
 		</div>
 	)
 }
