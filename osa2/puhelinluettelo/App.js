@@ -7,7 +7,7 @@ const Name = (props) => {
 	return (
 		<ol>
 		{props.perso.map((item, index) => (
-			<li>{item["name"]} </li>
+			<li>{item["name"]}: {item["number"]}</li>
 		))}
 		</ol>
 	)
@@ -15,9 +15,10 @@ const Name = (props) => {
 
 const App = (props) => {
 	const [ persons, setPersons ] = useState([
-		{name: 'Arto Hellas', key:1 }
+		{name: 'Arto Hellas', key:1, number: "666-1234-1234" }
 	])
 	const [ newName, setNewName ] = useState('')
+	const [ newNumber, setNewNumber ] = useState('')
 
 	const addName = (event) => {
 		event.preventDefault()
@@ -28,17 +29,19 @@ const App = (props) => {
 			const real_name = persons[nam]["name"]
 			console.log("in search func", real_name, needle)
 			if (real_name == needle) {
-				alert(needle + " is already added to phonebook")
+				alert(needle + " on jo luettelossa")
 				return
 			}
 		}
 
 
 		const nameObj = {
-			name: newName
+			name: newName,
+			number: newNumber
 		}
 		setPersons(persons.concat(nameObj))
 		setNewName('')
+		setNewNumber('')
 	}
 
 	const handleNameChange = (event) => {
@@ -46,17 +49,23 @@ const App = (props) => {
 		setNewName(event.target.value)
 	}
 
+	const handleNumberChange = (event) => {
+		event.preventDefault()
+		setNewNumber(event.target.value)
+	}
+
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<div>
-				<Name perso={persons} />
-			</div>
 			<form onSubmit={addName}>
 				<div>
-					name: <input 
+					nimi: <input 
 						value={newName}
 						onChange={handleNameChange}
+					/><br/>
+					numero: <input	
+						value={newNumber}
+						onChange={handleNumberChange}
 					/>
 				</div>
 				<div>
@@ -64,7 +73,10 @@ const App = (props) => {
 
 				</div>
 			</form>
-			<h2>Numerot</h2>
+			<h2>Numbers</h2>
+			<div>
+				<Name perso={persons} />
+			</div>
 		</div>
 	)
 }
