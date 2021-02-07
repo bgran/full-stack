@@ -1,41 +1,14 @@
 import React, { Component, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-
-const Name = (props) => {
-	const cs = props.currsearch.toLowerCase()
-	let myarr = []
-
-	if (cs === "") myarr = props.perso
-	else {
-		props.perso.map((item, index) => {
-			let iname = item["name"].toLowerCase();
-			if (iname.includes(cs)) {
-				myarr.push({name: item["name"], number: item["number"]})
-				console.log("item name: ", iname)
-			} else {
-				console.log("item name: ", item["name"])
-				console.log("cs: " , cs)
-			}
-		})
-	}
-
-	return (
-		<ul>
-		{myarr.map((item, index) => (
-			<li>{item["name"]}: {item["number"]}</li>
-		))}
-		</ul>
-	)
-}
+import  UserForm from './UserForm'
+import Name from './Name'
+import Filter from "./Filter"
 
 const App = (props) => {
+	//console.log("PROPSIT: ", props)
 	const [ persons, setPersons ] = useState([
-		{ name: 'Arto Hellas', number: '040-123456' },
-		{ name: 'Ada Lovelace', number: '39-44-5323523' },
-		{ name: 'Dan Abramov', number: '12-43-234345' },
-		{ name: 'Mary Poppendieck', number: '39-23-6423122' }
+		{name: 'Arto Hellas', key:1, number: "666-1234-1234" }
 	])
 	const [ newName, setNewName ] = useState('')
 	const [ newNumber, setNewNumber ] = useState('')
@@ -75,48 +48,41 @@ const App = (props) => {
 
 	const handleNumberChange = (event) => {
 		event.preventDefault()
-		//console.log("handlenNumberChange")
+		console.log("handlenNumberChange")
 		setNewNumber(event.target.value)
 	}
 
 	const handleSearchName = (props) => {
-		//console.log("handleSearchName ->")
+		console.log("handleSearchName ->")
 		const needle = props.target.value
 		setSearchName(needle)
 	}
 
 	return (
 		<div>
-			<h2>Phonebook</h2>
+			<h2>Puhelinluettelo</h2>
+			<p>
 			<form>
 				<div>
-					filter shown with <input 
-						value={searchName}
-						onChange={handleSearchName}
-					/>
+					<Filter persons={persons} searchName={searchName} searchFunc={handleSearchName} />
 				</div>
 			</form>
-			<h3>add a new</h3>
-			<form onSubmit={addName}>
+			</p>
+			<p>
 				<div>
-					name: <input 
-						value={newName}
-						onChange={handleNameChange}
-					/>
-					<br/>
-					number: <input	
-						value={newNumber}
-						onChange={handleNumberChange}
+					<UserForm persons={persons} form1={handleNameChange}
+						form2={handleNumberChange}
+						set_num={setNewNumber}
+						set_name={setNewName}
+						val_name={newName}
+						val_num={newNumber}
+						name_callback={addName}
 					/>
 				</div>
-				<div>
-					<button type="submit">add</button>
-
-				</div>
-			</form>
+			</p>
 			<h2>Numbers</h2>
 			<div>
-				<Name perso={persons} currsearch={searchName} />
+				<Name perso={persons} currsearch={searchName} searchFunc={handleSearchName} />
 			</div>
 		</div>
 	)
