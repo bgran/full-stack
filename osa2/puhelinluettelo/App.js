@@ -4,21 +4,42 @@ import './App.css';
 
 
 const Name = (props) => {
+	const cs = props.currsearch.toLowerCase()
+	let myarr = []
+
+	if (cs === "") myarr = props.perso
+	else {
+		props.perso.map((item, index) => {
+			let iname = item["name"].toLowerCase();
+			if (iname.includes(cs)) {
+				myarr.push({name: item["name"], number: item["number"]})
+				console.log("item name: ", iname)
+			} else {
+				console.log("item name: ", item["name"])
+				console.log("cs: " , cs)
+			}
+		})
+	}
+
 	return (
-		<ol>
-		{props.perso.map((item, index) => (
+		<ul>
+		{myarr.map((item, index) => (
 			<li>{item["name"]}: {item["number"]}</li>
 		))}
-		</ol>
+		</ul>
 	)
 }
 
 const App = (props) => {
 	const [ persons, setPersons ] = useState([
-		{name: 'Arto Hellas', key:1, number: "666-1234-1234" }
+		{ name: 'Arto Hellas', number: '040-123456' },
+		{ name: 'Ada Lovelace', number: '39-44-5323523' },
+		{ name: 'Dan Abramov', number: '12-43-234345' },
+		{ name: 'Mary Poppendieck', number: '39-23-6423122' }
 	])
 	const [ newName, setNewName ] = useState('')
 	const [ newNumber, setNewNumber ] = useState('')
+	const [ searchName, setSearchName ] = useState('')
 
 	const addName = (event) => {
 		event.preventDefault()
@@ -42,28 +63,48 @@ const App = (props) => {
 		setPersons(persons.concat(nameObj))
 		setNewName('')
 		setNewNumber('')
+
+		//console.log("NAPPI PAINETTU", event.target)
 	}
 
 	const handleNameChange = (event) => {
 		event.preventDefault()
+		//console.log("handleNameChange")
 		setNewName(event.target.value)
 	}
 
 	const handleNumberChange = (event) => {
 		event.preventDefault()
+		//console.log("handlenNumberChange")
 		setNewNumber(event.target.value)
+	}
+
+	const handleSearchName = (props) => {
+		//console.log("handleSearchName ->")
+		const needle = props.target.value
+		setSearchName(needle)
 	}
 
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<form>
+				<div>
+					filter shown with <input 
+						value={searchName}
+						onChange={handleSearchName}
+					/>
+				</div>
+			</form>
+			<h3>add a new</h3>
 			<form onSubmit={addName}>
 				<div>
-					nimi: <input 
+					name: <input 
 						value={newName}
 						onChange={handleNameChange}
-					/><br/>
-					numero: <input	
+					/>
+					<br/>
+					number: <input	
 						value={newNumber}
 						onChange={handleNumberChange}
 					/>
@@ -75,7 +116,7 @@ const App = (props) => {
 			</form>
 			<h2>Numbers</h2>
 			<div>
-				<Name perso={persons} />
+				<Name perso={persons} currsearch={searchName} />
 			</div>
 		</div>
 	)
