@@ -26,17 +26,17 @@ const Content = (props) => {
         )
 }
 
-//const Total = (props) => {
-//        let total = 0
-//        for (let i=0; i<props.course_data["parts"].length; i++) {
-//                total += props.course_data["parts"][i]["harkkoja"]
-//        }
-//        return (
-//                <div>
-//                        {total} harkkoja
-//                </div>
-//        )
-//}
+const Total = (props) => {
+        let total = 0
+        for (let i=0; i<props.course_data["parts"].length; i++) {
+                total += props.course_data["parts"][i]["exercises"]
+        }
+        return (
+                <div>
+                        <b>total of {total} exercises</b>
+                </div>
+        )
+}
 
 const Course = (props) => {
 	console.log("Course ->")
@@ -44,17 +44,19 @@ const Course = (props) => {
 		<div>
 			<Header course={props.course} />
 			<Content course={props.course} />
+			<Total course_data={props.course} />
 		</div>
 	)
 
 }
 const App = () => {
         const course = {
-                "name": "Half Stack -sovelluskehitys",
+                "name": "Half Stack application development",
                 "parts":[
-                        {"name": "Reacting perusteet", "exercises":10, id:1},
-                        {"name": "Tiedonvälitys propseilla", "exercises":7, id:2},
-                        {"name": "Kompoenttien tila", "exercises":14, id:3}
+                        {"name": "Fundamentals of React", "exercises":10, id:1},
+                        {"name": "Using porps to pass data", "exercises":7, id:2},
+                        {"name": "State of component", "exercises":14, id:3},
+			{"name": "Redux", "exercises":14, id:4}
                 ]
         }
 
