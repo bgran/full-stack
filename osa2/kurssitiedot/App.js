@@ -5,6 +5,7 @@ const Header = (props) => {
         return (
                 <h1>{props.course["name"]}</h1>
         )
+
 }
 
 const Part = (props) => {
@@ -27,13 +28,16 @@ const Content = (props) => {
 }
 
 const Total = (props) => {
-        let total = 0
-        for (let i=0; i<props.course_data["parts"].length; i++) {
-                total += props.course_data["parts"][i]["exercises"]
-        }
+	const o = props.course_data
+	const w_tot = o["parts"].reduce((a, b) => {
+		return a + b["exercises"]
+	}, 0 )
+
+	console.log("w_tot: ", w_tot)
+
         return (
                 <div>
-                        <b>total of {total} exercises</b>
+                        <b>total of {w_tot} exercises</b>
                 </div>
         )
 }
@@ -54,19 +58,12 @@ const App = () => {
                 "name": "Half Stack application development",
                 "parts":[
                         {"name": "Fundamentals of React", "exercises":10, id:1},
-                        {"name": "Using porps to pass data", "exercises":7, id:2},
+                        {"name": "Using props to pass data", "exercises":7, id:2},
                         {"name": "State of component", "exercises":14, id:3},
 			{"name": "Redux", "exercises":14, id:4}
                 ]
         }
 
-
-        //const part1 = 'Reactin perusteet'
-        //const exercises1 = 10
-        //const part2 = 'Tiedonvälitys propseilla'
-        //const exercises2 = 7
-        //const part3 = 'Komponenttien tila'
-        //const exercises3 = 14
 
         return (
                 <div>
