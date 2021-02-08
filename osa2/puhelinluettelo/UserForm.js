@@ -38,10 +38,6 @@ const UserForm = (props) => {
 			</form>
 		</div>
 	)
-
-
-
-
 }
 
 export default UserForm

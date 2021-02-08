@@ -4,7 +4,11 @@ import './App.css';
 import UserForm from './UserForm'
 import Name from './Name'
 import Filter from "./Filter"
+import { create, update, Removeid, Foo } from './Database'
+import { removeid } from './Database'
+//import './Database'
 import axios from 'axios'
+import { variaablei } from './Kala'
 
 const App = (props) => {
 	//console.log("PROPSIT: ", props)
@@ -37,6 +41,18 @@ const App = (props) => {
 	}, [])
 
 
+	const foo_create = newObj => {
+		const baseUrl="http://localhost:3001/persons"
+		const req = axios.post(baseUrl, newObj)
+		return req.then(response => response.data)
+	}
+	function foo_removeid2 (myid) {
+		const baseUrl="http://localhost:3001/persons"
+		const req = axios.delete(`${baseUrl}/${myid}`)
+		return req.then (response => response.data)
+	}
+
+
 
 	const addName = (event) => {
 		event.preventDefault()
@@ -52,15 +68,28 @@ const App = (props) => {
 			}
 		}
 
+		let maxid = 0
+		for (var i=0; i<persons.length; i++) {
+			var item = persons[i]
+			if (item["id"] > maxid)
+				maxid = item["id"]
+		}
+		maxid ++
+		//alert("maxid: " + maxid)
+
 		const nameObj = {
 			name: newName,
 			number: newNumber,
-			key: persons.length
+			key: persons.length,
+			id: maxid
 		}
 		setPersons(persons.concat(nameObj))
 		setNewName('')
 		setNewNumber('')
-		const query = "http://localhost:3001/persons"
+
+		foo_create(nameObj)
+		/*
+		const query = "http://localhost:3001/persons
 
 		console.log("HUOH")
 
@@ -70,6 +99,7 @@ const App = (props) => {
 		}
 		const promise = axios.post(query, nameObj)
 		promise.then(eHandler)
+		*/
 
 		console.log("NAPPI PAINETTU", event.target)
 	}
@@ -90,6 +120,26 @@ const App = (props) => {
 		console.log("handleSearchName ->")
 		const needle = props.target.value
 		setSearchName(needle)
+	}
+
+	//const delName = (props) => {
+	const delName = (myid,myname) => {
+		let r = window.confirm("Delete " + myname)
+		if (r) {
+			//alert("r tosi")
+			const baseUrl = "http://localhost:3001/persons"
+			const req = axios.delete(`${baseUrl}/${myid}`)
+			req.then( response => response.data)
+			let newpersons = []
+			for (var i=0; i<persons.length; i++) {
+				if (persons[i]["id"] == myid) {
+				} else {
+					newpersons.push(persons[i])
+				}
+
+			}
+			setPersons(newpersons)
+		}
 	}
 
 	console.log("persons: lopussa  ", persons)
@@ -114,7 +164,7 @@ const App = (props) => {
 				</div>
 			<h2>Numerot</h2>
 			<div>
-				<Name perso={persons} currsearch={searchName} searchFunc={handleSearchName} />
+				<Name perso={persons} submit_clb={delName} currsearch={searchName} searchFunc={handleSearchName} />
 			</div>
 		</div>
 	)

@@ -1,6 +1,16 @@
 import React, { Component, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { removeid } from './Database'
+
+const Button = (props) => {
+	const name = props.myname
+	return (
+		<button onClick={() => props.submit_clb(props.myid,name)}>delete</button>
+	)
+}
+
+
 
 const Name = (props) => {
 
@@ -13,12 +23,9 @@ const Name = (props) => {
 
         if (cs === "") myarr = props.perso
         else {
-                //console.log("props: ", props)
                 props.perso.map((item, index) => {
 			let iname = item["name"].toLowerCase()
 			let ics = cs.toLowerCase()
-                        //console.log("NAME: ", item)
-                        //console.log("NAME2: " , index)
                         if (iname.includes(ics)) {
                                 console.log("item name: ", item["name"])
                                 console.log("cs: " , cs)
@@ -26,7 +33,6 @@ const Name = (props) => {
                         } else {
                                 console.log("item name: ", item["name"])
                                 console.log("cs: " , cs)
-                                //myarr.push({name: item["name"], number: item["number"]})
                         }
                 })
         }
@@ -34,7 +40,7 @@ const Name = (props) => {
         return (
                 <ul>
                 {myarr.map((item, index) => (
-                        <li>{item["name"]}: {item["number"]}</li>
+                        <li>{item["name"]}: {item["number"]} <Button myid={item["id"]} myname={item["name"]} submit_clb={props.submit_clb} clb={removeid} /></li>
                 ))}
                 </ul>
         )
