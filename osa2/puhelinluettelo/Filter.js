@@ -20,7 +20,6 @@ const Filter = (props) => {
                                 onChange={searchFunc}
                         />
                 </div>
-
         )
 }
 

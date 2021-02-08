@@ -15,6 +15,8 @@ const App = (props) => {
 		//{name: 'Arto Hellas', key:1, number: "666-1234-1234" }
 	])
 
+	const [ loading, setLoading ] = useState(true)
+
 	const [ newName, setNewName ] = useState('')
 	const [ newNumber, setNewNumber ] = useState('')
 	const [ searchName, setSearchName ] = useState('')
@@ -31,24 +33,10 @@ const App = (props) => {
 		}
 		const promise = axios.get("http://localhost:3001/persons")
 		promise.then(eventHandler)
+		console.log("promise fulfilled")
 	}, [])
 
-	const addPersons = (person_data) => {
-		console.log("addPersons: ", person_data)
-		for (let i=0; i<person_data.length; i++) {
-			const k = person_data[i]
-			console.log("k", k)
-			const nameObj = {
-				name: k.name,
-				number: k.number,
-				key: i
-			}
-			console.log("lisättavä: ", nameObj)
-			setPersons(persons.concat(nameObj))
 
-			console.log("setPersons: ", persons.length)
-		}
-	}
 
 	const addName = (event) => {
 		event.preventDefault()
@@ -64,7 +52,6 @@ const App = (props) => {
 			}
 		}
 
-
 		const nameObj = {
 			name: newName,
 			number: newNumber,
@@ -73,8 +60,18 @@ const App = (props) => {
 		setPersons(persons.concat(nameObj))
 		setNewName('')
 		setNewNumber('')
+		const query = "http://localhost:3001/persons"
 
-		//console.log("NAPPI PAINETTU", event.target)
+		console.log("HUOH")
+
+		const eHandler = response => {
+			console.log("promise fulfilled")
+			setLoading (false)
+		}
+		const promise = axios.post(query, nameObj)
+		promise.then(eHandler)
+
+		console.log("NAPPI PAINETTU", event.target)
 	}
 
 	const handleNameChange = (event) => {
