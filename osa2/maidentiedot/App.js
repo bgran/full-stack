@@ -3,9 +3,39 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios'
 
+const Weather = (props) => {
+	const capital = props.capital
+	const [ilma, setW] = useState([])
+	const [l, setL] = useState(true)
+	const _api_key = process.env.WK
+	const api_key = ""
+	const query = `http://api.weatherstack.com/current?access_key=${api_key}&query=${capital}`
+
+	useEffect(() => {
+		console.log("effect")
+		const eventHandler = response => {
+			console.log("promise fulfilled")
+			setW(response.data)
+			setL(false)
+		}
+		const promise = axios.get(query)
+		promise.then(eventHandler)
+	}, [])
+
+	return l ? <p>Loading..</p> : (
+		<div>
+			<h2>Weather in {ilma.location.name}</h2>	
+			Temperature: {ilma.current.temperature}<br/>
+			<img src="{ilma.current.weather_icons}" /><br/>
+			{ilma.current.weather_icons}<br/>
+			Wind: {ilma.current.wind_speed} direction {ilma.current.wind_dir}	
+		</div>
+	)
+}
 
 const Country = (props) => {
 	const o = props.data
+
 	if (o.length == 1) {
 		const d = o[0]
 		return (
@@ -20,8 +50,10 @@ const Country = (props) => {
 				))}
 				</ol>
 				<img src={d["flag"]} width="200" />
+				<p>
+				<Weather capital={d["capital"]}/>
+				</p>
 			</div>
-				
 		)
 	} else {
 		return (
