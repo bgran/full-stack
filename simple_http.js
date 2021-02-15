@@ -1,6 +1,10 @@
 //const http = require('http')
 const express = require('express')
+const bodyparser = require('body-parser')
 const app = express()
+
+var json_parser = bodyparser.json()
+var tmp = bodyparser.urlencoded({extended: false })
 
 let data = [
 	{
@@ -63,6 +67,32 @@ app.delete('/api/persons/delete/:id', (req, res) => {
 	delete data[id]
 	res.writeHead(200, {'Content-Type': 'text/plain'})
 	res.end("200 Done");
+})
+
+function random_val (max) {
+	if (max === undefined) {
+		max = Math.random() * Number.MAX_SAFE_INTEGER
+	}
+	return Math.floor(Math.random() * max)
+}
+
+app.post('/api/persons/add', tmp, (req, res) => {
+	console.log("HUOH")
+	const name = req.body.name
+	const numb = req.body.number
+	console.log("adding shit: " + name)
+	console.log("adding shit: " + numb)
+
+	const id = random_val()
+	var newdata = {
+		'id': id,
+		'name': name,
+		'number': numb
+	}
+	data.push(newdata)
+	res.writeHead(200, {'Content-Type': 'text/plain'})
+	res.end("200 Done")
+
 })
 
 const port = 3001
