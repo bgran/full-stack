@@ -83,6 +83,25 @@ app.post('/api/persons/add', tmp, (req, res) => {
 	console.log("adding shit: " + name)
 	console.log("adding shit: " + numb)
 
+	if (req.body.name === undefined) {
+		res.writeHead(500, {"Content-Type": "text/plain"})
+		res.end(JSON.stringify({error: 'name must be defined'}))
+		return;
+	}
+	if (req.body.number === undefined) {
+		res.writeHead(500, {"Content-Type": "text/plain"})
+		res.end(JSON.stringify({error: 'number must be defined'}))
+		return;
+	}
+
+	for (var i=0; i < data.length; i++) {
+		if (data[i]["name"] == name) {
+			res.writeHead(500, {"Content-Type": "text/plain"})
+			res.end(JSON.stringify({error: "name must be unique"}))
+			return;
+		}
+	}
+
 	const id = random_val()
 	var newdata = {
 		'id': id,
