@@ -3,6 +3,7 @@ const express = require('express')
 const bodyparser = require('body-parser')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 var json_parser = bodyparser.json()
 var tmp = bodyparser.urlencoded({extended: false })
@@ -12,6 +13,7 @@ var tmp = bodyparser.urlencoded({extended: false })
 morgan.token('json', function (req, res) { return JSON.stringify(req.body) })
 var logger = morgan(':method :url :status :res[content-length] - :response-time ms :json')
 app.use(logger)
+app.use(cors())
 
 let data = [
 	{
