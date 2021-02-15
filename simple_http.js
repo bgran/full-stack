@@ -2,9 +2,16 @@
 const express = require('express')
 const bodyparser = require('body-parser')
 const app = express()
+const morgan = require('morgan')
 
 var json_parser = bodyparser.json()
 var tmp = bodyparser.urlencoded({extended: false })
+
+//var logger = morgan('tiny')
+//morgan.token('json', function (req, res) { return req.headers["body"] })
+morgan.token('json', function (req, res) { return JSON.stringify(req.body) })
+var logger = morgan(':method :url :status :res[content-length] - :response-time ms :json')
+app.use(logger)
 
 let data = [
 	{
@@ -77,11 +84,9 @@ function random_val (max) {
 }
 
 app.post('/api/persons/add', tmp, (req, res) => {
-	console.log("HUOH")
 	const name = req.body.name
 	const numb = req.body.number
-	console.log("adding shit: " + name)
-	console.log("adding shit: " + numb)
+
 
 	if (req.body.name === undefined) {
 		res.writeHead(500, {"Content-Type": "text/plain"})
