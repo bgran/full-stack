@@ -47,6 +47,16 @@ app.get('/info', (req, res) => {
 	res.send(_res)
 })
 
+app.get('/api/persons/:id', (req, res) => {
+	const id = req.params.id
+	var d = data[id]
+	if (d === undefined) {
+		res.writeHead(404, {'Content-Type': 'text/plain'})
+		res.end("404 Not Found")
+	} else {
+		res.send(d)
+	}
+})
 
 const port = 3001
 app.listen(port)
