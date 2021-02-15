@@ -58,6 +58,13 @@ app.get('/api/persons/:id', (req, res) => {
 	}
 })
 
+app.delete('/api/persons/delete/:id', (req, res) => {
+	const id = req.params.id
+	delete data[id]
+	res.writeHead(200, {'Content-Type': 'text/plain'})
+	res.end("200 Done");
+})
+
 const port = 3001
 app.listen(port)
 console.log(`Server running on port ${port}`)
