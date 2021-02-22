@@ -1,0 +1,44 @@
+{
+  "name": "part1",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "babel-preset-react": "^6.22.0",
+    "cors": "^2.8.5",
+    "mongoose": "^5.11.16",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "^0.9.5",
+    "ts-jest": "^26.5.1",
+    "ts-node": "^9.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest --verbose",
+    "eject": "react-scripts eject"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "preset": "ts-jest",
+    "transform": {
+      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!variables/.*)"
+    ]
+  },
+  "presets": [
+    "env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "transform-class-properties"
+  ],
+  "devDependencies": {
+    "@babel/preset-env": "^7.12.17",
+    "babel-jest": "^18.0.0",
+    "jest": "^26.6.3"
+  }
+}
