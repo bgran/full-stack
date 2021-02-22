@@ -3,6 +3,7 @@ const express = require('express')
 const bodyparser = require('body-parser')
 const app = express()
 const morgan = require('morgan')
+const mongoose = require('mongoose')
 
 var json_parser = bodyparser.json()
 var tmp = bodyparser.urlencoded({extended: false })
@@ -10,8 +11,22 @@ var tmp = bodyparser.urlencoded({extended: false })
 //var logger = morgan('tiny')
 //morgan.token('json', function (req, res) { return req.headers["body"] })
 morgan.token('json', function (req, res) { return JSON.stringify(req.body) })
-var logger = morgan(':method :url :status :res[content-length] - :response-time ms :json')
+morgan.token('host', function(req, res) { return req.hostname })
+morgan.token('clienthost', function(req, res) { return res.hostname })
+var logger = morgan(':method :url :status :remote-addr :host :res[content-length] - :response-time ms :json')
 app.use(logger)
+
+//const pass_phrase = "DFeorwefkSDFwfklsfowerERpvFgDGDFG"
+const pass_phrase = ""
+const url = "mongodb+srv://bgran1337:'"+ pass_phrase +"'@fullstackdev.vuyki.mongodb.net/FullStackDev"
+const PhoneSchema = new mongoose.Schema({
+	name: String,
+	number: String,
+	date: Date,
+	id: Number,
+	newera: Boolean
+})
+const Phone = mongoose.model('Phone', PhoneSchema)
 
 let data = [
 	{
@@ -36,10 +51,60 @@ let data = [
 	}
 ]
 
+try {
+	mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
+} catch (error) {
+	console.log("mongoose.connect failed", error)
+}
+
 //const app = http.createServer((request, response) => {
 //        response.writeHead(200, { 'Content-Type': 'text/plain' } )
 //        response.end('Hello World!')
 //})
+
+app.get('/phones/all', (req, res) => {
+
+	console.log("PHONES/ALL")
+	//const pass_phrase = "DFeorwefkSDFwfklsfowerERpvFgDGDFG"
+	//const url = "mongodb+srv://bgran1337:"+ pass_phrase +"@fullstackdev.vuyki.mongodb.net/FullStackDev"
+	////mongoose.createConnection(url)
+	//try {
+	//	mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
+	//} catch (error) { 
+	//	console.log("mongoose.connect failed", error)
+	//}
+/*
+        const PhoneSchema = new mongoose.Schema({
+                name: String,
+                number: String,
+                date: Date,
+                id: Number,
+                newera: Boolean
+        })
+
+	const Phone = mongoose.model('Phone', PhoneSchema)
+*/
+        console.log("Phone", Phone)
+        var rv = []
+	fookala: () => {
+		return Phone.find({}).exec()
+		.then((phones) => {
+			console.log("phones", phones)
+			return phones
+		}).catch((err) => {
+			return "Error happened"
+		})
+	}
+        /*Phone.find({}).then(phones => {
+		console.log("HUOKEAAAA")
+                for(const phone of phones) {
+                        rv.push(phone)
+                }
+                mongoose.connection.close()
+        })*/
+	console.log("ENDING PHONES_ALL")
+        return (rv)
+})
 
 app.get('/', (req, res) => {
 	res.send("<h1>Hello World!</h1>")
